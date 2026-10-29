@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogue Di Sản Kiến Trúc Chùa Khmer</title>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    .flipbook-container {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .page {
+      background-color: #fff;
+      overflow: hidden;
+    }
+    .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    button {
+      padding: 8px 18px;
+      background: #ff8c00;
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #e07b00; }
+    .page-info { color: #fff; font-size: 15px; }
+  </style>
+</head>
+<body>
+
+  <div class="flipbook-container" id="book"></div>
+
+  <div class="controls">
+    <button id="btn-prev">‹ Trang trước</button>
+    <span class="page-info" id="page-num">Trang 1 / 24</span>
+    <button id="btn-next">Trang sau ›</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bookContainer = document.getElementById('book');
+      const totalPages = 24;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        
+
+        if (i === 1) {
+          pageDiv.setAttribute('data-density', 'hard');
+        }
+        const fileName = String(i).padStart(2, '0') + '.webp';
+        
+        const img = document.createElement('img');
+        img.src = `./pages/${fileName}`;         img.alt = `Trang ${i}`;
+
+        pageDiv.appendChild(img);
+        bookContainer.appendChild(pageDiv);
+      }
+
+
+      const pageFlip = new St.PageFlip(bookContainer, {
+        width: 800,          
+        height: 450,                 
+        size: "fixed",
+        maxShadowOpacity: 0.5,
+        showCover: true,   
+        mobileScrollSupport: false
+      });
+
+      pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+
+      document.getElementById('btn-prev').addEventListener('click', () => pageFlip.flipPrev());
+      document.getElementById('btn-next').addEventListener('click', () => pageFlip.flipNext());
+
+      pageFlip.on('flip', (e) => {
+        document.getElementById('page-num').innerText = `Trang ${e.data + 1} / ${pageFlip.getPageCount()}`;
+      });
+    });
+  </script>
+</body>
+</html>
